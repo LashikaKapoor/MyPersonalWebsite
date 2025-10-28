@@ -1,7 +1,5 @@
-/* ============================
-   Advanced interactions script
-   ============================
-   - keeps your toggleDarkMode() signature
+/* Advanced interactions — final version
+   - preserves toggleDarkMode() signature
    - hero particles + parallax + cursor trail
    - typing animation
    - reveal-on-scroll + page transitions
@@ -11,7 +9,7 @@
    - keyboard shortcut (Ctrl/Cmd + D) to toggle theme
 */
 
-// -------------------- Theme (keeps your original)
+// ---------- THEME (keeps your original function)
 function toggleDarkMode() {
   document.body.classList.toggle('dark-mode');
   const themeBtn = document.getElementById('themeBtn');
@@ -32,58 +30,52 @@ document.getElementById('themeBtn').addEventListener('click', toggleDarkMode);
 
 // resume button placeholder
 document.getElementById('resumeBtn').addEventListener('click', ()=> {
-  // replace href with your resume link
   window.open('https://example.com/Lashika_Resume.pdf', '_blank');
 });
 
 // set year
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// -------------------- Page transition mask
+// page mask transition
 const pageMask = document.getElementById('pageMask');
 window.addEventListener('load', ()=> {
   setTimeout(()=> pageMask.style.transform = 'translateY(-110%)', 350);
 });
-// re-show mask when nav anchor clicked for micro-page-transition
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click', e=>{
-    // smooth scroll handled later
     pageMask.style.transform = 'translateY(0%)';
     setTimeout(()=> pageMask.style.transform = 'translateY(-110%)', 450);
   });
 });
 
-// -------------------- Typing animation (roles)
-const roles = ["Founder & CEO", "AI Innovator", "Robotics Engineer", "ML Explorer", "Competitive Programmer"];
+// typing roles
+const roles = ["Founder & CEO of CodeUnity", "Beaver Works / BWSI @ MIT", "AI Innovator & Robotics Programmer", "Aspiring MIT Engineer"];
 const typingEl = document.getElementById('typing');
 let roleIdx = 0, charIdx = 0, forward = true;
 function tick(){
   const current = roles[roleIdx];
   if(forward){
     charIdx++;
-    if(charIdx > current.length){ forward = false; setTimeout(tick, 800); return; }
+    if(charIdx > current.length){ forward = false; setTimeout(tick, 900); return; }
   } else {
     charIdx--;
-    if(charIdx < 0){ forward = true; roleIdx = (roleIdx+1) % roles.length; setTimeout(tick, 200); return; }
+    if(charIdx < 0){ forward = true; roleIdx = (roleIdx+1) % roles.length; setTimeout(tick, 220); return; }
   }
   typingEl.textContent = current.slice(0, charIdx);
-  setTimeout(tick, forward ? 60 : 30);
+  setTimeout(tick, forward ? 50 : 25);
 }
 tick();
 
-// -------------------- Reveal on scroll (IntersectionObserver)
-const reveals = document.querySelectorAll('.glass, .section-title, .project, .profile-card, .card, .timeline-list li');
+// reveal on scroll
+const reveals = document.querySelectorAll('.glass, .section-title, .project, .profile-card, .card, .timeline-list li, .codeunity-grid');
 const io = new IntersectionObserver((entries)=>{
   entries.forEach(e=>{
     if(e.isIntersecting){ e.target.style.opacity = 1; e.target.style.transform = 'none'; io.unobserve(e.target); }
   });
-},{threshold: 0.12});
-reveals.forEach(n => {
-  n.style.opacity = 0; n.style.transform = 'translateY(18px)';
-  io.observe(n);
-});
+},{threshold:0.12});
+reveals.forEach(n=>{ n.style.opacity=0; n.style.transform='translateY(18px)'; io.observe(n); });
 
-// -------------------- Progress bars and circular meters
+// prog fills and circular meters
 const fills = document.querySelectorAll('.prog-fill');
 const circles = document.querySelectorAll('.meter');
 const fillObs = new IntersectionObserver(entries=>{
@@ -93,20 +85,17 @@ const fillObs = new IntersectionObserver(entries=>{
         const val = ent.target.dataset.fill || 60;
         ent.target.style.width = val + '%';
       } else if(ent.target.classList.contains('meter')){
-        // animate circular meter
         const v = parseFloat(ent.target.dataset.value) || 0.6;
         drawCircularMeter(ent.target, v);
       }
       fillObs.unobserve(ent.target);
     }
   });
-},{threshold: 0.3});
-fills.forEach(f => fillObs.observe(f));
-circles.forEach(c => fillObs.observe(c));
+},{threshold:0.3});
+fills.forEach(f=>fillObs.observe(f));
+circles.forEach(c=>fillObs.observe(c));
 
-// helper to draw circular meter inside element (creates SVG)
 function drawCircularMeter(node, value){
-  // create a simple SVG ring with stroke-dasharray animation
   const size = 86; const stroke = 4; const radius = (size - stroke) / 2; const circumference = 2 * Math.PI * radius;
   const svgns = "http://www.w3.org/2000/svg";
   const svg = document.createElementNS(svgns, 'svg');
@@ -120,16 +109,13 @@ function drawCircularMeter(node, value){
   fg.setAttribute('stroke-linecap', 'round'); fg.setAttribute('transform', `rotate(-90 ${size/2} ${size/2})`);
   fg.style.strokeDasharray = `${circumference} ${circumference}`;
   fg.style.strokeDashoffset = circumference;
-  // gradient defs
   const defs = document.createElementNS(svgns, 'defs');
-  const lin = document.createElementNS(svgns, 'linearGradient');
-  lin.setAttribute('id', 'g'); lin.setAttribute('x1','0%'); lin.setAttribute('y1','0%'); lin.setAttribute('x2','100%'); lin.setAttribute('y2','0%');
+  const lin = document.createElementNS(svgns, 'linearGradient'); lin.setAttribute('id','g'); lin.setAttribute('x1','0%'); lin.setAttribute('y1','0%'); lin.setAttribute('x2','100%'); lin.setAttribute('y2','0%');
   const s1 = document.createElementNS(svgns, 'stop'); s1.setAttribute('offset','0%'); s1.setAttribute('stop-color','#66f0d4');
   const s2 = document.createElementNS(svgns, 'stop'); s2.setAttribute('offset','100%'); s2.setAttribute('stop-color','#7dd3fc');
   lin.appendChild(s1); lin.appendChild(s2); defs.appendChild(lin);
   svg.appendChild(defs); svg.appendChild(bg); svg.appendChild(fg);
   node.innerHTML = ''; node.appendChild(svg);
-  // animate
   const toOffset = circumference * (1 - value);
   let start = null;
   function animate(ts){
@@ -139,7 +125,6 @@ function drawCircularMeter(node, value){
     fg.style.strokeDashoffset = cur;
     if(t < 1) requestAnimationFrame(animate);
     else {
-      // add inner label
       const lbl = document.createElement('div'); lbl.style.position='absolute'; lbl.style.fontSize='13px'; lbl.style.fontWeight='700';
       lbl.style.color='var(--txt)'; lbl.style.top='40%'; lbl.style.transform='translateY(-50%)'; lbl.innerText = Math.round(value*100)+'%';
       node.appendChild(lbl);
@@ -149,40 +134,25 @@ function drawCircularMeter(node, value){
 }
 function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
 
-// -------------------- Particle field + parallax (heroCanvas)
+// hero particles
 (function heroEngine(){
-  const canvas = document.getElementById('heroCanvas');
-  if(!canvas) return;
+  const canvas = document.getElementById('heroCanvas'); if(!canvas) return;
   const ctx = canvas.getContext('2d');
   let w = innerWidth, h = innerHeight * 0.9;
   function resize(){ canvas.width = w = innerWidth; canvas.height = h = innerHeight * 0.9; }
   addEventListener('resize', resize); resize();
-
   function rand(a,b){return Math.random()*(b-a)+a;}
-  class P{ constructor(){ this.reset(); }
-    reset(){ this.x = rand(0,w); this.y = rand(0,h); this.r = rand(0.6,3); this.vx = rand(-0.25,0.25); this.vy = rand(-0.15,0.15); this.a = rand(0.06,0.25);
-    }
-    step(){ this.x += this.vx; this.y += this.vy; if(this.x<-20||this.x>w+20||this.y<-20||this.y>h+20) this.reset(); }
-    draw(){ ctx.beginPath(); ctx.fillStyle = `rgba(125,200,255,${this.a})`; ctx.arc(this.x,this.y,this.r,0,Math.PI*2); ctx.fill(); }
-  }
-  let particles = [];
-  function init(n=Math.round((w*h)/90000)){ particles = []; for(let i=0;i<n;i++) particles.push(new P()); }
-  init();
-
+  class P{ constructor(){ this.reset(); } reset(){ this.x = rand(0,w); this.y = rand(0,h); this.r = rand(0.6,3); this.vx = rand(-0.25,0.25); this.vy = rand(-0.15,0.15); this.a = rand(0.06,0.25);} step(){ this.x += this.vx; this.y += this.vy; if(this.x<-20||this.x>w+20||this.y<-20||this.y>h+20) this.reset(); } draw(){ ctx.beginPath(); ctx.fillStyle = `rgba(125,200,255,${this.a})`; ctx.arc(this.x,this.y,this.r,0,Math.PI*2); ctx.fill(); } }
+  let particles = []; function init(n=Math.round((w*h)/90000)){ particles = []; for(let i=0;i<n;i++) particles.push(new P()); } init();
   function loop(){
     ctx.clearRect(0,0,w,h);
-    // gradient backdrop
     const g = ctx.createLinearGradient(0,0,w,h); g.addColorStop(0,'rgba(6,18,36,0.35)'); g.addColorStop(1,'rgba(2,8,14,0.55)');
     ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
     particles.forEach(p=>{ p.step(); p.draw(); });
-    // subtle lines
     for(let i=0;i<particles.length;i++){
       for(let j=i+1;j<particles.length;j++){
-        const a=particles[i], b=particles[j];
-        const dx=a.x-b.x, dy=a.y-b.y; const d=Math.sqrt(dx*dx+dy*dy);
-        if(d<110){
-          ctx.beginPath(); ctx.strokeStyle = `rgba(125,200,255,${0.01 + (0.06*(1-d/110))})`; ctx.lineWidth = 0.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
-        }
+        const a=particles[i], b=particles[j]; const dx=a.x-b.x, dy=a.y-b.y; const d=Math.sqrt(dx*dx+dy*dy);
+        if(d<110){ ctx.beginPath(); ctx.strokeStyle = `rgba(125,200,255,${0.01 + (0.06*(1-d/110))})`; ctx.lineWidth = 0.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
       }
     }
     requestAnimationFrame(loop);
@@ -190,25 +160,17 @@ function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
   requestAnimationFrame(loop);
 })();
 
-// -------------------- Cursor glow trail
+// cursor trail
 (function cursorTrail(){
   const trail = []; const max = 16;
   const canvas = document.createElement('canvas'); canvas.style.position='fixed'; canvas.style.left=0; canvas.style.top=0; canvas.style.pointerEvents='none'; canvas.style.zIndex=120; document.body.appendChild(canvas);
-  const ctx = canvas.getContext('2d');
-  function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; } addEventListener('resize', resize); resize();
+  const ctx = canvas.getContext('2d'); function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; } addEventListener('resize', resize); resize();
   addEventListener('mousemove', (e)=>{ trail.unshift({x:e.clientX,y:e.clientY,a:1}); if(trail.length>max) trail.pop(); });
-  function draw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    for(let i=0;i<trail.length;i++){
-      const p = trail[i]; const s = (1 - i/trail.length) * 18;
-      ctx.beginPath(); ctx.fillStyle = `rgba(125,200,255,${0.14 - (i/trail.length)*0.12})`; ctx.arc(p.x,p.y,s,0,Math.PI*2); ctx.fill();
-    }
-    requestAnimationFrame(draw);
-  }
+  function draw(){ ctx.clearRect(0,0,canvas.width,canvas.height); for(let i=0;i<trail.length;i++){ const p = trail[i]; const s = (1 - i/trail.length) * 18; ctx.beginPath(); ctx.fillStyle = `rgba(102,240,212,${0.14 - (i/trail.length)*0.12})`; ctx.arc(p.x,p.y,s,0,Math.PI*2); ctx.fill(); } requestAnimationFrame(draw); }
   requestAnimationFrame(draw);
 })();
 
-// -------------------- Tilt effect for project cards (pointer-based)
+// tilt cards
 (function tiltCards(){
   const cards = document.querySelectorAll('.tilt');
   cards.forEach(card=>{
@@ -225,7 +187,7 @@ function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
   });
 })();
 
-// -------------------- Project modal (reads data-project JSON)
+// project modal
 (function projectModal(){
   const modal = document.getElementById('projectModal');
   const content = document.getElementById('modalContent');
@@ -240,7 +202,7 @@ function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
             <h2>${escapeHtml(info.title)}</h2>
             <p style="color:var(--muted)">${escapeHtml(info.desc)}</p>
             <p><strong>Tags:</strong> ${info.tags.map(t=>`<span style="margin-right:.5rem;background:rgba(255,255,255,0.02);padding:.3rem .5rem;border-radius:8px;">${escapeHtml(t)}</span>`).join('')}</p>
-            <h4>Notes</h4><p style="color:var(--muted)">Add experiment details, dataset links, or code snippets here. Replace placeholders with your repo links.</p>
+            <h4>Notes</h4><p style="color:var(--muted)">Add experiment details, dataset links, or code snippets here. Replace placeholders with your repo links or lab notes.</p>
           </div>
           <div style="border-radius:10px;overflow:hidden">
             <img src="${info.img}" style="width:100%;height:100%;object-fit:cover" alt="${escapeHtml(info.title)}">
@@ -252,11 +214,10 @@ function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
   });
   close.addEventListener('click', ()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); });
   modal.addEventListener('click', (e)=>{ if(e.target === modal) { modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); } });
-
   function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 })();
 
-// -------------------- Smooth scroll for anchor links
+// smooth scroll
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click', e=>{
     const href = a.getAttribute('href');
@@ -268,7 +229,7 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   });
 });
 
-// -------------------- Keyboard shortcut for theme: Ctrl/Cmd + D
+// keyboard theme shortcut
 window.addEventListener('keydown', (e)=>{
   if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'd'){
     e.preventDefault(); toggleDarkMode();

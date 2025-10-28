@@ -3,171 +3,207 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Lashika Kapoor | Founder & CEO of CodeUnity</title>
-  <meta name="description" content="Portfolio of Lashika Kapoor — Founder & CEO of CodeUnity. Student innovator working on MFCs, myoelectric prosthetics, AI research, and outreach." />
-  <link rel="stylesheet" href="styles.css">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <title>Lashika Kapoor — Portfolio</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+
+  <!-- Icons (optional) -->
+  <script src="https://kit.fontawesome.com/5d8b6a1f8b.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <header class="nav" role="banner">
-    <div class="container nav-inner">
-      <a class="brand" href="#top" aria-label="Home - Lashika Kapoor">
-        <div class="logo" aria-hidden="true">LK</div>
-        <div class="brand-text">
-          <div class="brand-name">Lashika Kapoor</div>
-          <div class="brand-sub">Founder &amp; CEO — CodeUnity</div>
-        </div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="logo" href="#hero">
+        <span class="logo-symbol">LK</span>
+        <span class="logo-text">Lashika Kapoor</span>
       </a>
 
-      <div class="nav-actions">
-        <button id="themeToggle" class="btn-sm" aria-pressed="false" title="Toggle color theme">🌗 Theme</button>
-        <a class="btn-primary" href="#projects">Projects</a>
-      </div>
+      <nav class="nav">
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#timeline">Journey</a>
+        <a href="#contact">Contact</a>
+        <button id="themeBtn" aria-label="Toggle dark mode" class="btn-ghost">🌙</button>
+      </nav>
     </div>
   </header>
 
-  <main id="top" class="container main">
-    <section class="hero">
-      <div class="hero-left">
-        <div class="badge">Founder · Student · Researcher</div>
-        <h1 class="hero-title">
-          Hi — I’m <strong>Lashika Kapoor</strong><br/>
-          <span class="hero-tagline" id="typewriter" aria-live="polite"></span>
-        </h1>
-        <p class="lead">
-          Founder &amp; CEO of <strong>CodeUnity</strong> (launched into two states within week one). I build hardware + AI projects, compete in robotics and Model UN, and research low-cost Microbial Fuel Cells (MFCs) with sensors for monitoring and outreach.
-        </p>
+  <main>
+    <!-- HERO -->
+    <section id="hero" class="hero">
+      <canvas id="heroCanvas" class="hero-canvas" aria-hidden="true"></canvas>
+      <div class="hero-content container">
+        <div class="intro">
+          <h1 class="reveal">Lashika Kapoor</h1>
+          <p class="sub reveal delay-1">Sophomore @ Shrewsbury High • Founder &amp; CEO, <span class="accent">CodeUnity</span></p>
+          <p class="lead reveal delay-2">Building micro-bial fuel cells, prosthetic hands, &amp; smart ML projects. BWSI @ MIT participant. USACO & ACSL aspirant. FRC roboteer & volunteer mentor for FLL.</p>
 
-        <div class="ctas">
-          <a class="btn" href="#about">About</a>
-          <a class="btn" href="#projects">Work</a>
-          <a class="btn" href="#contact">Contact</a>
+          <div class="hero-ctas reveal delay-3">
+            <a class="btn" href="#projects">See Projects</a>
+            <a class="btn btn-outline" href="#timeline">My Journey</a>
+          </div>
         </div>
 
-        <div class="quick-stats">
-          <div><strong>14</strong><span>years old</span></div>
-          <div><strong>5+</strong><span>yrs Model UN</span></div>
-          <div><strong>2</strong><span>states launched</span></div>
+        <div class="hero-profile reveal delay-4">
+          <div class="profile-card">
+            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Lashika Kapoor photo" />
+            <div class="profile-meta">
+              <h3>Lashika Kapoor</h3>
+              <p><strong>Founder &amp; CEO</strong>, CodeUnity</p>
+              <p>BWSI @ MIT • FRC • USACO • GTSA • Robotics mentor</p>
+              <div class="profile-tags">
+                <span>Python</span><span>Java</span><span>ML</span><span>Embedded</span>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-
-      <aside class="hero-right card">
-        <img src="profile.jpg" alt="Photo of Lashika Kapoor" class="profile-img" />
-        <div class="mini">Current</div>
-        <ul class="mini-list">
-          <li>MIT BWSI — Beaver Works Summer Institute</li>
-          <li>Computer Club — Member</li>
-          <li>Preparing for science fair — MFC + sensor</li>
-        </ul>
-      </aside>
     </section>
 
-    <section id="about" class="section">
-      <div class="section-head">
-        <h2>About</h2>
-        <p class="section-lead">I combine hands-on engineering with machine learning and outreach.</p>
-      </div>
+    <!-- ABOUT -->
+    <section id="about" class="section about container">
+      <div class="grid">
+        <div class="card reveal">
+          <h2>About Me</h2>
+          <p>I am a sophomore at Shrewsbury High School passionate about robotics, computational biology, and building systems that help people. Current focus: microbial fuel cells for science fair, resuming a prosthetic hand project, and expanding CodeUnity — a nonprofit teaching coding across states.</p>
 
-      <div class="about-grid">
-        <div class="card">
-          <h3>Who I Am</h3>
-          <p>
-            I’m a student, founder, and maker. I code primarily in <strong>Python</strong> and build end-to-end projects that span hardware, firmware, and data analysis. Through <strong>CodeUnity</strong>, I teach coding and build community — starting in two states within the first week of launch. I’ve competed in Model UN for five years, which sharpened my research and communication skills. Right now I’m researching affordable Microbial Fuel Cells (MFC) and designing sensors to monitor their outputs for science fair outreach.
-          </p>
-          <ul>
-            <li>🧰 Skills: Python, Arduino, Git, basic Java</li>
-            <li>🤖 Interests: robotics, edge AI, bioenergy, accessibility tech</li>
-            <li>🎯 Goal: build accessible hardware + ML tools and study AI engineering</li>
+          <ul class="bullets">
+            <li>Founder &amp; CEO — CodeUnity</li>
+            <li>BWSI participant at MIT (online)</li>
+            <li>FRC team member; FLL volunteer mentor</li>
+            <li>USACO & ACSL competitor-in-training</li>
           </ul>
         </div>
 
-        <div class="card">
-          <h3>Leadership & Outreach</h3>
-          <p>
-            As Founder &amp; CEO of <strong>CodeUnity</strong>, I coordinate workshops, online lessons, and local meetups to bring coding to school-aged learners. I lead curriculum work and partner with mentors to scale our programs.
-          </p>
-
-          <h4>Activities</h4>
-          <ul class="compact">
-            <li>Founder &amp; CEO — CodeUnity (multi-state launch)</li>
-            <li>MIT BWSI participant</li>
-            <li>Model United Nations — 5+ years</li>
-            <li>Computer Club — member & mentor</li>
-          </ul>
+        <div class="card reveal delay-1">
+          <h2>Skills &amp; Tech</h2>
+          <div class="skill">
+            <label>Python</label>
+            <div class="bar"><div class="bar-fill" data-fill="92"></div></div>
+          </div>
+          <div class="skill">
+            <label>Java</label>
+            <div class="bar"><div class="bar-fill" data-fill="75"></div></div>
+          </div>
+          <div class="skill">
+            <label>Embedded &amp; Hardware</label>
+            <div class="bar"><div class="bar-fill" data-fill="70"></div></div>
+          </div>
+          <div class="skill">
+            <label>ML &amp; Computer Vision</label>
+            <div class="bar"><div class="bar-fill" data-fill="66"></div></div>
+          </div>
+          <div class="skill small">
+            <label>Leadership &amp; Teaching</label>
+            <div class="bar"><div class="bar-fill" data-fill="88"></div></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section id="projects" class="section">
-      <div class="section-head">
-        <h2>Selected Projects</h2>
-        <p class="section-lead">Work that showcases research, engineering, and outreach.</p>
-      </div>
+    <!-- PROJECTS -->
+    <section id="projects" class="section projects">
+      <div class="container">
+        <h2 class="section-title reveal">Selected Projects</h2>
 
-      <div class="filters" role="tablist" aria-label="Project filters">
-        <button class="chip active" data-filter="all" role="tab" aria-selected="true">All</button>
-        <button class="chip" data-filter="mfc" role="tab">MFC</button>
-        <button class="chip" data-filter="ai" role="tab">AI</button>
-        <button class="chip" data-filter="hw" role="tab">Hardware</button>
-        <button class="chip" data-filter="outreach" role="tab">Outreach</button>
-      </div>
+        <div class="projects-grid">
+          <article class="project-card reveal">
+            <div class="project-media">
+              <img src="https://images.unsplash.com/photo-1581092580499-3f4b5d6e7d8c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Microbial fuel cell">
+            </div>
+            <div class="project-body">
+              <h3>Microbial Fuel Cell</h3>
+              <p>Designing a compact microbial fuel cell for the science fair that harvests bioelectricity from microbes. Focus on efficiency, real-world testing, and data logging.</p>
+              <div class="project-tags"><span>Electrochemistry</span><span>Data Logging</span></div>
+            </div>
+          </article>
 
-      <div id="projectsGrid" class="grid" aria-live="polite"></div>
-    </section>
+          <article class="project-card reveal delay-1">
+            <div class="project-media">
+              <img src="https://images.unsplash.com/photo-1581091012184-9b3e6b6c1fcf?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Prosthetic hand">
+            </div>
+            <div class="project-body">
+              <h3>Prosthetic Hand (WIP)</h3>
+              <p>Previously prototyped a 3D-printed prosthetic hand; aim to reintroduce improved actuation and add microcontroller-based control with sensor feedback and code for precision movement.</p>
+              <div class="project-tags"><span>3D Print</span><span>Embedded</span></div>
+            </div>
+          </article>
 
-    <section id="experience" class="section">
-      <div class="section-head">
-        <h2>Experience & Programs</h2>
-      </div>
-
-      <div class="timeline">
-        <div class="timeline-item card">
-          <h3>MIT — Beaver Works Summer Institute (BWSI)</h3>
-          <p>Hands-on AI & engineering modules; collaborating with peers and mentors on real-world problems.</p>
-        </div>
-
-        <div class="timeline-item card">
-          <h3>CodeUnity — Founder & CEO</h3>
-          <p>Launched a nonprofit to teach coding and financial literacy to students; expanded to two states within week one.</p>
-        </div>
-
-        <div class="timeline-item card">
-          <h3>Science Fair — MFC Research</h3>
-          <p>Designing an affordable microbial fuel cell and coding a sensor system to monitor electrical output and environmental conditions.</p>
-        </div>
-      </div>
-    </section>
-
-    <section id="contact" class="section">
-      <div class="section-head">
-        <h2>Contact</h2>
-        <p class="section-lead">Collaborate, mentor, or reach out about projects and workshops.</p>
-      </div>
-
-      <div class="card contact card-row">
-        <div>
-          <strong>GitHub</strong><br>
-          <a href="https://github.com/LashikaKapoor" target="_blank" rel="noopener">github.com/LashikaKapoor</a>
-        </div>
-        <div>
-          <strong>Email</strong><br>
-          <a href="mailto:lashika.kapoor@example.com">lashika.kapoor@example.com</a>
-        </div>
-        <div>
-          <strong>CodeUnity</strong><br>
-          <a href="#" target="_blank" rel="noopener">codeunity.org (placeholder)</a>
+          <article class="project-card reveal delay-2">
+            <div class="project-media">
+              <img src="https://images.unsplash.com/photo-1508898578281-774ac4893a2f?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Skin cancer detection ML">
+            </div>
+            <div class="project-body">
+              <h3>Skin / ML Experiments</h3>
+              <p>Exploratory ML for skin lesion classification using transfer learning (VGG family). Goal: responsible experimentation and clear evaluation metrics.</p>
+              <div class="project-tags"><span>ML</span><span>Transfer Learning</span></div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
+
+    <!-- TIMELINE -->
+    <section id="timeline" class="section timeline container">
+      <h2 class="section-title reveal">Journey &amp; Highlights</h2>
+      <div class="timeline-grid">
+        <div class="timeline-item reveal">
+          <div class="time">FRC • Present</div>
+          <h3>Robotics — FRC Team</h3>
+          <p>Active member building competitive robots; skills: mechanical, control systems, and teamwork.</p>
+        </div>
+
+        <div class="timeline-item reveal delay-1">
+          <div class="time">BWSI • 2025</div>
+          <h3>Boston Workshop for STEM Integration (BWSI)</h3>
+          <p>Completed MIT-affiliated online coursework, exploring AI/ML and biomedical applications.</p>
+        </div>
+
+        <div class="timeline-item reveal delay-2">
+          <div class="time">GTSA • Past</div>
+          <h3>Generation Teach STEM Academy</h3>
+          <p>Participated in hands-on STEM training and mentorship programs.</p>
+        </div>
+
+        <div class="timeline-item reveal delay-3">
+          <div class="time">VEX Regionals</div>
+          <h3>Competition Experience</h3>
+          <p>Reached regionals in VEX; valuable competition and design experience.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact" class="section contact">
+      <div class="container">
+        <div class="contact-card reveal">
+          <h2>Get in touch</h2>
+          <p>If you'd like to collaborate, mentor, or invite me to speak, send a message. (No backend here — use mailto link or wire up your own form handler.)</p>
+
+          <div class="contact-actions">
+            <a class="btn" href="mailto:lashika@example.com?subject=Hi%20Lashika">Email Me</a>
+            <a class="btn btn-outline" href="#projects">See Projects</a>
+          </div>
+
+          <div class="socials">
+            <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> Lashika Kapoor • Built with ❤️ and curiosity.</p>
+      </div>
+    </footer>
   </main>
-
-  <footer class="container footer">
-    <div>© <span id="year"></span> Lashika Kapoor · Founder &amp; CEO, CodeUnity</div>
-    <div class="footer-small">Built with ❤️ · Open to collaboration</div>
-  </footer>
 
   <script src="script.js"></script>
 </body>
 </html>
-
-

@@ -5,100 +5,123 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Lashika Kapoor — Portfolio</title>
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-
-  <!-- Icons (optional) -->
+  <!-- Fonts & icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Space+Grotesk:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://kit.fontawesome.com/5d8b6a1f8b.js" crossorigin="anonymous"></script>
 
   <link rel="stylesheet" href="styles.css" />
+  <meta name="description" content="Lashika Kapoor — Founder & CEO, CodeUnity. Robotics, ML, embedded systems, and competitive programming.">
 </head>
 <body>
-  <header class="site-header">
-    <div class="header-inner">
-      <a class="logo" href="#hero">
-        <span class="logo-symbol">LK</span>
-        <span class="logo-text">Lashika Kapoor</span>
-      </a>
+  <div id="app" class="app">
+    <!-- PRELOADER / PAGE TRANSITION -->
+    <div id="pageMask" class="page-mask" aria-hidden="true"></div>
 
-      <nav class="nav">
-        <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#timeline">Journey</a>
-        <a href="#contact">Contact</a>
-        <button id="themeBtn" aria-label="Toggle dark mode" class="btn-ghost">🌙</button>
-      </nav>
-    </div>
-  </header>
+    <!-- HEADER -->
+    <header class="header">
+      <div class="container header-row">
+        <a class="brand" href="#hero"><span class="brand-logo">LK</span><span class="brand-name">Lashika Kapoor</span></a>
 
-  <main>
+        <nav class="nav">
+          <a href="#about">About</a>
+          <a href="#projects">Projects</a>
+          <a href="#timeline">Journey</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="controls">
+          <button id="themeBtn" class="icon-btn" aria-label="Toggle theme">🌙</button>
+          <button id="resumeBtn" class="btn small">Resume</button>
+        </div>
+      </div>
+    </header>
+
     <!-- HERO -->
     <section id="hero" class="hero">
       <canvas id="heroCanvas" class="hero-canvas" aria-hidden="true"></canvas>
-      <div class="hero-content container">
-        <div class="intro">
-          <h1 class="reveal">Lashika Kapoor</h1>
-          <p class="sub reveal delay-1">Sophomore @ Shrewsbury High • Founder &amp; CEO, <span class="accent">CodeUnity</span></p>
-          <p class="lead reveal delay-2">Building micro-bial fuel cells, prosthetic hands, &amp; smart ML projects. BWSI @ MIT participant. USACO & ACSL aspirant. FRC roboteer & volunteer mentor for FLL.</p>
+      <div id="parallaxWave" class="parallax-wave" aria-hidden="true"></div>
 
-          <div class="hero-ctas reveal delay-3">
-            <a class="btn" href="#projects">See Projects</a>
-            <a class="btn btn-outline" href="#timeline">My Journey</a>
+      <div class="container hero-grid">
+        <div class="hero-left">
+          <h1 class="hero-title">Hi — I'm <span class="name">Lashika Kapoor</span></h1>
+
+          <div class="typing-wrap">
+            <span id="typing" class="typing"></span>
+            <span class="cursor">|</span>
+          </div>
+
+          <p class="hero-sub">Sophomore @ Shrewsbury High • Founder &amp; CEO of <span class="accent">CodeUnity</span>. Building microbial fuel cells, prosthetic hands, ML experiments, and competitive robots.</p>
+
+          <div class="hero-ctas">
+            <a href="#projects" class="btn">Projects</a>
+            <a href="#contact" class="btn hollow">Contact</a>
+          </div>
+
+          <div class="skill-pill-group">
+            <div class="pill">FRC</div>
+            <div class="pill">BWSI @ MIT</div>
+            <div class="pill">USACO</div>
+            <div class="pill">GTSA</div>
           </div>
         </div>
 
-        <div class="hero-profile reveal delay-4">
-          <div class="profile-card">
-            <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Lashika Kapoor photo" />
-            <div class="profile-meta">
+        <div class="hero-right">
+          <div id="profileCard" class="profile-card">
+            <div class="profile-media">
+              <img id="profileImg" src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Lashika Kapoor">
+              <div class="glow-ring"></div>
+            </div>
+            <div class="profile-body">
               <h3>Lashika Kapoor</h3>
-              <p><strong>Founder &amp; CEO</strong>, CodeUnity</p>
-              <p>BWSI @ MIT • FRC • USACO • GTSA • Robotics mentor</p>
-              <div class="profile-tags">
-                <span>Python</span><span>Java</span><span>ML</span><span>Embedded</span>
+              <p class="muted">Founder &amp; CEO — CodeUnity</p>
+              <div class="meta-grid">
+                <div><strong>Focus</strong><span>Robotics • ML • Embedded</span></div>
+                <div><strong>Role</strong><span>Founder • Student • Mentor</span></div>
+              </div>
+
+              <div class="circles">
+                <div class="circle" data-value="0.92"><svg viewBox="0 0 36 36" class="circular-chart"><path class="circle-bg" d="M18 2.0845a15.9155 15.9155 0 1 0 0 31.831 15.9155 15.9155 0 1 0 0-31.831"/></svg><small>Python</small></div>
+                <div class="circle" data-value="0.78"><svg viewBox="0 0 36 36" class="circular-chart"><path class="circle-bg" d="M18 2.0845a15.9155 15.9155 0 1 0 0 31.831 15.9155 15.9155 0 1 0 0-31.831"/></svg><small>Java</small></div>
               </div>
             </div>
           </div>
+
+          <div class="cursor-hint">Press <kbd>D</kbd> to toggle theme</div>
         </div>
       </div>
     </section>
 
     <!-- ABOUT -->
-    <section id="about" class="section about container">
-      <div class="grid">
-        <div class="card reveal">
-          <h2>About Me</h2>
-          <p>I am a sophomore at Shrewsbury High School passionate about robotics, computational biology, and building systems that help people. Current focus: microbial fuel cells for science fair, resuming a prosthetic hand project, and expanding CodeUnity — a nonprofit teaching coding across states.</p>
+    <section id="about" class="section about">
+      <div class="container">
+        <div class="about-grid">
+          <div class="glass card">
+            <h2>About</h2>
+            <p>I am a sophomore at Shrewsbury High School passionate about robotics, computational biology, and creating real-world projects. Current projects include a microbial fuel cell for the science fair and a prosthetic hand prototype. I also lead CodeUnity — an educational nonprofit.</p>
+            <ul class="list">
+              <li>Founder &amp; CEO — CodeUnity</li>
+              <li>FRC robotics • FLL mentor • VEX regionals</li>
+              <li>BWSI @ MIT participant • GTSA alumnus</li>
+            </ul>
+          </div>
 
-          <ul class="bullets">
-            <li>Founder &amp; CEO — CodeUnity</li>
-            <li>BWSI participant at MIT (online)</li>
-            <li>FRC team member; FLL volunteer mentor</li>
-            <li>USACO & ACSL competitor-in-training</li>
-          </ul>
-        </div>
+          <div class="glass card">
+            <h2>Skills</h2>
+            <div class="skill-circle-wrap">
+              <!-- circular meters animated by JS -->
+              <div class="meter" data-label="Embedded" data-value="0.72"></div>
+              <div class="meter" data-label="ML" data-value="0.66"></div>
+              <div class="meter" data-label="Leadership" data-value="0.9"></div>
+            </div>
 
-        <div class="card reveal delay-1">
-          <h2>Skills &amp; Tech</h2>
-          <div class="skill">
-            <label>Python</label>
-            <div class="bar"><div class="bar-fill" data-fill="92"></div></div>
-          </div>
-          <div class="skill">
-            <label>Java</label>
-            <div class="bar"><div class="bar-fill" data-fill="75"></div></div>
-          </div>
-          <div class="skill">
-            <label>Embedded &amp; Hardware</label>
-            <div class="bar"><div class="bar-fill" data-fill="70"></div></div>
-          </div>
-          <div class="skill">
-            <label>ML &amp; Computer Vision</label>
-            <div class="bar"><div class="bar-fill" data-fill="66"></div></div>
-          </div>
-          <div class="skill small">
-            <label>Leadership &amp; Teaching</label>
-            <div class="bar"><div class="bar-fill" data-fill="88"></div></div>
+            <h3 class="mt">Programming</h3>
+            <div class="prog">
+              <label>Python</label>
+              <div class="prog-bar"><div class="prog-fill" data-fill="92"></div></div>
+
+              <label>Java</label>
+              <div class="prog-bar"><div class="prog-fill" data-fill="78"></div></div>
+            </div>
           </div>
         </div>
       </div>
@@ -107,39 +130,36 @@
     <!-- PROJECTS -->
     <section id="projects" class="section projects">
       <div class="container">
-        <h2 class="section-title reveal">Selected Projects</h2>
+        <h2 class="section-title">Selected Projects</h2>
 
         <div class="projects-grid">
-          <article class="project-card reveal">
-            <div class="project-media">
-              <img src="https://images.unsplash.com/photo-1581092580499-3f4b5d6e7d8c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Microbial fuel cell">
-            </div>
-            <div class="project-body">
+          <!-- card 1 -->
+          <article class="project glass tilt" data-project='{"title":"Microbial Fuel Cell","tags":["Electrochemistry","Data logging"],"desc":"Designing a compact microbial fuel cell that harvests bio-electricity — includes data logging and performance tests.","img":"https://images.unsplash.com/photo-1581092580499-3f4b5d6e7d8c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder"}'>
+            <div class="proj-media"><img src="https://images.unsplash.com/photo-1581092580499-3f4b5d6e7d8c?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt=""></div>
+            <div class="proj-body">
               <h3>Microbial Fuel Cell</h3>
-              <p>Designing a compact microbial fuel cell for the science fair that harvests bioelectricity from microbes. Focus on efficiency, real-world testing, and data logging.</p>
-              <div class="project-tags"><span>Electrochemistry</span><span>Data Logging</span></div>
+              <p class="muted">Energy harvesting from microbes, prototype &amp; testing.</p>
+              <div class="proj-footer"><button class="btn ghost view">View</button></div>
             </div>
           </article>
 
-          <article class="project-card reveal delay-1">
-            <div class="project-media">
-              <img src="https://images.unsplash.com/photo-1581091012184-9b3e6b6c1fcf?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Prosthetic hand">
-            </div>
-            <div class="project-body">
+          <!-- card 2 -->
+          <article class="project glass tilt" data-project='{"title":"Prosthetic Hand (WIP)","tags":["3D Print","Embedded"],"desc":"3D printed prosthetic with servo actuation and sensor feedback; planning precision control via microcontroller.","img":"https://images.unsplash.com/photo-1581091012184-9b3e6b6c1fcf?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder"}'>
+            <div class="proj-media"><img src="https://images.unsplash.com/photo-1581091012184-9b3e6b6c1fcf?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt=""></div>
+            <div class="proj-body">
               <h3>Prosthetic Hand (WIP)</h3>
-              <p>Previously prototyped a 3D-printed prosthetic hand; aim to reintroduce improved actuation and add microcontroller-based control with sensor feedback and code for precision movement.</p>
-              <div class="project-tags"><span>3D Print</span><span>Embedded</span></div>
+              <p class="muted">Control &amp; actuation improvements; adding sensor-driven feedback.</p>
+              <div class="proj-footer"><button class="btn ghost view">View</button></div>
             </div>
           </article>
 
-          <article class="project-card reveal delay-2">
-            <div class="project-media">
-              <img src="https://images.unsplash.com/photo-1508898578281-774ac4893a2f?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt="Skin cancer detection ML">
-            </div>
-            <div class="project-body">
-              <h3>Skin / ML Experiments</h3>
-              <p>Exploratory ML for skin lesion classification using transfer learning (VGG family). Goal: responsible experimentation and clear evaluation metrics.</p>
-              <div class="project-tags"><span>ML</span><span>Transfer Learning</span></div>
+          <!-- card 3 -->
+          <article class="project glass tilt" data-project='{"title":"Skin ML Experiments","tags":["ML","Transfer Learning"],"desc":"Exploratory classification experiments using transfer learning (VGG family) with responsible evaluation.","img":"https://images.unsplash.com/photo-1508898578281-774ac4893a2f?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder"}'>
+            <div class="proj-media"><img src="https://images.unsplash.com/photo-1508898578281-774ac4893a2f?q=80&w=1200&auto=format&fit=crop&ixlib=rb-4.0.3&s=placeholder" alt=""></div>
+            <div class="proj-body">
+              <h3>Skin ML Experiments</h3>
+              <p class="muted">Transfer learning for lesion classification and model evaluation.</p>
+              <div class="proj-footer"><button class="btn ghost view">View</button></div>
             </div>
           </article>
         </div>
@@ -147,63 +167,53 @@
     </section>
 
     <!-- TIMELINE -->
-    <section id="timeline" class="section timeline container">
-      <h2 class="section-title reveal">Journey &amp; Highlights</h2>
-      <div class="timeline-grid">
-        <div class="timeline-item reveal">
-          <div class="time">FRC • Present</div>
-          <h3>Robotics — FRC Team</h3>
-          <p>Active member building competitive robots; skills: mechanical, control systems, and teamwork.</p>
-        </div>
-
-        <div class="timeline-item reveal delay-1">
-          <div class="time">BWSI • 2025</div>
-          <h3>Boston Workshop for STEM Integration (BWSI)</h3>
-          <p>Completed MIT-affiliated online coursework, exploring AI/ML and biomedical applications.</p>
-        </div>
-
-        <div class="timeline-item reveal delay-2">
-          <div class="time">GTSA • Past</div>
-          <h3>Generation Teach STEM Academy</h3>
-          <p>Participated in hands-on STEM training and mentorship programs.</p>
-        </div>
-
-        <div class="timeline-item reveal delay-3">
-          <div class="time">VEX Regionals</div>
-          <h3>Competition Experience</h3>
-          <p>Reached regionals in VEX; valuable competition and design experience.</p>
-        </div>
+    <section id="timeline" class="section timeline">
+      <div class="container">
+        <h2 class="section-title">Journey & Highlights</h2>
+        <ul class="timeline-list">
+          <li><strong>FRC (Present)</strong> — Robotics, control systems, competitions.</li>
+          <li><strong>BWSI (2025)</strong> — MIT-affiliated online courses in AI/biomed.</li>
+          <li><strong>GTSA</strong> — Hands-on STEM training and mentoring.</li>
+          <li><strong>VEX Regionals</strong> — Competition experience and iterative design.</li>
+        </ul>
       </div>
     </section>
 
     <!-- CONTACT -->
     <section id="contact" class="section contact">
-      <div class="container">
-        <div class="contact-card reveal">
-          <h2>Get in touch</h2>
-          <p>If you'd like to collaborate, mentor, or invite me to speak, send a message. (No backend here — use mailto link or wire up your own form handler.)</p>
+      <div class="container contact-grid">
+        <div class="glass card contact-card">
+          <h2>Contact</h2>
+          <p>If you'd like to collaborate, mentor, or invite me to speak, send a message — or email directly.</p>
+          <a class="btn" href="mailto:lashika@example.com">Email Me</a>
+        </div>
 
-          <div class="contact-actions">
-            <a class="btn" href="mailto:lashika@example.com?subject=Hi%20Lashika">Email Me</a>
-            <a class="btn btn-outline" href="#projects">See Projects</a>
-          </div>
-
-          <div class="socials">
-            <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
-            <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-            <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <div class="glass card socials">
+          <h2>Links</h2>
+          <div class="links-grid">
+            <a href="#" class="link"><i class="fab fa-github"></i> GitHub</a>
+            <a href="#" class="link"><i class="fab fa-linkedin"></i> LinkedIn</a>
+            <a href="#" class="link"><i class="fab fa-instagram"></i> Instagram</a>
           </div>
         </div>
       </div>
     </section>
 
-    <footer class="site-footer">
+    <footer class="footer">
       <div class="container">
-        <p>© <span id="year"></span> Lashika Kapoor • Built with ❤️ and curiosity.</p>
+        <p>© <span id="year"></span> Lashika Kapoor • Built with curiosity.</p>
       </div>
     </footer>
-  </main>
+  </div>
 
-  <script src="script.js"></script>
+  <!-- PROJECT MODAL -->
+  <div id="projectModal" class="modal" aria-hidden="true">
+    <div class="modal-inner">
+      <button id="modalClose" class="modal-close" aria-label="Close">✕</button>
+      <div id="modalContent" class="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
 </body>
 </html>

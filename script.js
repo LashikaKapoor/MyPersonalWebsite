@@ -1,237 +1,282 @@
-/* Advanced interactions — final version
-   - preserves toggleDarkMode() signature
-   - hero particles + parallax + cursor trail
-   - typing animation
-   - reveal-on-scroll + page transitions
-   - circular meters and prog bars animated
-   - tilt hover on project cards
-   - project modal
-   - keyboard shortcut (Ctrl/Cmd + D) to toggle theme
-*/
+/* script.js - interactivity, starfield, animated counters, diagram */
 
-// ---------- THEME (keeps your original function)
-function toggleDarkMode() {
-  document.body.classList.toggle('dark-mode');
-  const themeBtn = document.getElementById('themeBtn');
-  const isDark = document.body.classList.contains('dark-mode');
-  themeBtn.textContent = isDark ? '☀️' : '🌙';
-  try { localStorage.setItem('lk-theme', isDark ? 'dark' : 'light'); } catch(e){}
+/* --------------------------
+   Starfield (canvas)
+   --------------------------*/
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+let w, h, stars;
+
+function resize() {
+  w = canvas.width = innerWidth;
+  h = canvas.height = innerHeight;
 }
-(function initTheme(){
-  try {
-    const pref = localStorage.getItem('lk-theme');
-    if(pref === 'dark') {
-      document.body.classList.add('dark-mode');
-      document.getElementById('themeBtn').textContent = '☀️';
-    }
-  } catch(e){}
-})();
-document.getElementById('themeBtn').addEventListener('click', toggleDarkMode);
+resize();
+addEventListener('resize', resize);
 
-// resume button placeholder
-document.getElementById('resumeBtn').addEventListener('click', ()=> {
-  window.open('https://example.com/Lashika_Resume.pdf', '_blank');
-});
-
-// set year
-document.getElementById('year').textContent = new Date().getFullYear();
-
-// page mask transition
-const pageMask = document.getElementById('pageMask');
-window.addEventListener('load', ()=> {
-  setTimeout(()=> pageMask.style.transform = 'translateY(-110%)', 350);
-});
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click', e=>{
-    pageMask.style.transform = 'translateY(0%)';
-    setTimeout(()=> pageMask.style.transform = 'translateY(-110%)', 450);
-  });
-});
-
-// typing roles
-const roles = ["Founder & CEO of CodeUnity", "Beaver Works / BWSI @ MIT", "AI Innovator & Robotics Programmer", "Aspiring MIT Engineer"];
-const typingEl = document.getElementById('typing');
-let roleIdx = 0, charIdx = 0, forward = true;
-function tick(){
-  const current = roles[roleIdx];
-  if(forward){
-    charIdx++;
-    if(charIdx > current.length){ forward = false; setTimeout(tick, 900); return; }
-  } else {
-    charIdx--;
-    if(charIdx < 0){ forward = true; roleIdx = (roleIdx+1) % roles.length; setTimeout(tick, 220); return; }
+function createStars(count=220){
+  stars = [];
+  for(let i=0;i<count;i++){
+    stars.push({
+      x: Math.random()*w,
+      y: Math.random()*h,
+      z: Math.random()*1.2 + 0.2,
+      r: Math.random()*1.6 + 0.2,
+      vx: (Math.random()-0.5) * 0.05,
+      vy: (Math.random()-0.5) * 0.05
+    });
   }
-  typingEl.textContent = current.slice(0, charIdx);
-  setTimeout(tick, forward ? 50 : 25);
 }
-tick();
+createStars(240);
 
-// reveal on scroll
-const reveals = document.querySelectorAll('.glass, .section-title, .project, .profile-card, .card, .timeline-list li, .codeunity-grid');
-const io = new IntersectionObserver((entries)=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){ e.target.style.opacity = 1; e.target.style.transform = 'none'; io.unobserve(e.target); }
-  });
-},{threshold:0.12});
-reveals.forEach(n=>{ n.style.opacity=0; n.style.transform='translateY(18px)'; io.observe(n); });
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  // slight gradient overlay to simulate depth
+  for(let s of stars){
+    s.x += s.vx * s.z * 0.8;
+    s.y += s.vy * s.z * 0.8;
+    if(s.x < -50) s.x = w + 30;
+    if(s.x > w+50) s.x = -30;
+    if(s.y < -50) s.y = h + 30;
+    if(s.y > h+50) s.y = -30;
 
-// prog fills and circular meters
-const fills = document.querySelectorAll('.prog-fill');
-const circles = document.querySelectorAll('.meter');
-const fillObs = new IntersectionObserver(entries=>{
-  entries.forEach(ent=>{
-    if(ent.isIntersecting){
-      if(ent.target.classList.contains('prog-fill')){
-        const val = ent.target.dataset.fill || 60;
-        ent.target.style.width = val + '%';
-      } else if(ent.target.classList.contains('meter')){
-        const v = parseFloat(ent.target.dataset.value) || 0.6;
-        drawCircularMeter(ent.target, v);
-      }
-      fillObs.unobserve(ent.target);
-    }
-  });
-},{threshold:0.3});
-fills.forEach(f=>fillObs.observe(f));
-circles.forEach(c=>fillObs.observe(c));
-
-function drawCircularMeter(node, value){
-  const size = 86; const stroke = 4; const radius = (size - stroke) / 2; const circumference = 2 * Math.PI * radius;
-  const svgns = "http://www.w3.org/2000/svg";
-  const svg = document.createElementNS(svgns, 'svg');
-  svg.setAttribute('width', size); svg.setAttribute('height', size); svg.setAttribute('viewBox', `0 0 ${size} ${size}`);
-  const bg = document.createElementNS(svgns, 'circle');
-  bg.setAttribute('cx', size/2); bg.setAttribute('cy', size/2); bg.setAttribute('r', radius);
-  bg.setAttribute('stroke', 'rgba(255,255,255,0.06)'); bg.setAttribute('stroke-width', stroke.toString()); bg.setAttribute('fill', 'none');
-  const fg = document.createElementNS(svgns, 'circle');
-  fg.setAttribute('cx', size/2); fg.setAttribute('cy', size/2); fg.setAttribute('r', radius);
-  fg.setAttribute('stroke', 'url(#g)'); fg.setAttribute('stroke-width', stroke.toString()); fg.setAttribute('fill', 'none');
-  fg.setAttribute('stroke-linecap', 'round'); fg.setAttribute('transform', `rotate(-90 ${size/2} ${size/2})`);
-  fg.style.strokeDasharray = `${circumference} ${circumference}`;
-  fg.style.strokeDashoffset = circumference;
-  const defs = document.createElementNS(svgns, 'defs');
-  const lin = document.createElementNS(svgns, 'linearGradient'); lin.setAttribute('id','g'); lin.setAttribute('x1','0%'); lin.setAttribute('y1','0%'); lin.setAttribute('x2','100%'); lin.setAttribute('y2','0%');
-  const s1 = document.createElementNS(svgns, 'stop'); s1.setAttribute('offset','0%'); s1.setAttribute('stop-color','#66f0d4');
-  const s2 = document.createElementNS(svgns, 'stop'); s2.setAttribute('offset','100%'); s2.setAttribute('stop-color','#7dd3fc');
-  lin.appendChild(s1); lin.appendChild(s2); defs.appendChild(lin);
-  svg.appendChild(defs); svg.appendChild(bg); svg.appendChild(fg);
-  node.innerHTML = ''; node.appendChild(svg);
-  const toOffset = circumference * (1 - value);
-  let start = null;
-  function animate(ts){
-    if(!start) start = ts;
-    const t = Math.min(1, (ts - start) / 900);
-    const cur = circumference - (circumference - toOffset) * easeOutCubic(t);
-    fg.style.strokeDashoffset = cur;
-    if(t < 1) requestAnimationFrame(animate);
-    else {
-      const lbl = document.createElement('div'); lbl.style.position='absolute'; lbl.style.fontSize='13px'; lbl.style.fontWeight='700';
-      lbl.style.color='var(--txt)'; lbl.style.top='40%'; lbl.style.transform='translateY(-50%)'; lbl.innerText = Math.round(value*100)+'%';
-      node.appendChild(lbl);
-    }
+    const alpha = (0.2 + 0.8 * (1/s.z));
+    ctx.beginPath();
+    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+    ctx.arc(s.x, s.y, s.r * (1.2/s.z), 0, Math.PI*2);
+    ctx.fill();
   }
-  requestAnimationFrame(animate);
-}
-function easeOutCubic(t){ return 1 - Math.pow(1 - t, 3); }
 
-// hero particles
-(function heroEngine(){
-  const canvas = document.getElementById('heroCanvas'); if(!canvas) return;
-  const ctx = canvas.getContext('2d');
-  let w = innerWidth, h = innerHeight * 0.9;
-  function resize(){ canvas.width = w = innerWidth; canvas.height = h = innerHeight * 0.9; }
-  addEventListener('resize', resize); resize();
-  function rand(a,b){return Math.random()*(b-a)+a;}
-  class P{ constructor(){ this.reset(); } reset(){ this.x = rand(0,w); this.y = rand(0,h); this.r = rand(0.6,3); this.vx = rand(-0.25,0.25); this.vy = rand(-0.15,0.15); this.a = rand(0.06,0.25);} step(){ this.x += this.vx; this.y += this.vy; if(this.x<-20||this.x>w+20||this.y<-20||this.y>h+20) this.reset(); } draw(){ ctx.beginPath(); ctx.fillStyle = `rgba(125,200,255,${this.a})`; ctx.arc(this.x,this.y,this.r,0,Math.PI*2); ctx.fill(); } }
-  let particles = []; function init(n=Math.round((w*h)/90000)){ particles = []; for(let i=0;i<n;i++) particles.push(new P()); } init();
-  function loop(){
-    ctx.clearRect(0,0,w,h);
-    const g = ctx.createLinearGradient(0,0,w,h); g.addColorStop(0,'rgba(6,18,36,0.35)'); g.addColorStop(1,'rgba(2,8,14,0.55)');
-    ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
-    particles.forEach(p=>{ p.step(); p.draw(); });
-    for(let i=0;i<particles.length;i++){
-      for(let j=i+1;j<particles.length;j++){
-        const a=particles[i], b=particles[j]; const dx=a.x-b.x, dy=a.y-b.y; const d=Math.sqrt(dx*dx+dy*dy);
-        if(d<110){ ctx.beginPath(); ctx.strokeStyle = `rgba(125,200,255,${0.01 + (0.06*(1-d/110))})`; ctx.lineWidth = 0.6; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
-      }
-    }
-    requestAnimationFrame(loop);
+  // occasional shooting star
+  if(Math.random() < 0.01){
+    shootingStar();
   }
-  requestAnimationFrame(loop);
-})();
-
-// cursor trail
-(function cursorTrail(){
-  const trail = []; const max = 16;
-  const canvas = document.createElement('canvas'); canvas.style.position='fixed'; canvas.style.left=0; canvas.style.top=0; canvas.style.pointerEvents='none'; canvas.style.zIndex=120; document.body.appendChild(canvas);
-  const ctx = canvas.getContext('2d'); function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; } addEventListener('resize', resize); resize();
-  addEventListener('mousemove', (e)=>{ trail.unshift({x:e.clientX,y:e.clientY,a:1}); if(trail.length>max) trail.pop(); });
-  function draw(){ ctx.clearRect(0,0,canvas.width,canvas.height); for(let i=0;i<trail.length;i++){ const p = trail[i]; const s = (1 - i/trail.length) * 18; ctx.beginPath(); ctx.fillStyle = `rgba(102,240,212,${0.14 - (i/trail.length)*0.12})`; ctx.arc(p.x,p.y,s,0,Math.PI*2); ctx.fill(); } requestAnimationFrame(draw); }
   requestAnimationFrame(draw);
-})();
+}
+draw();
 
-// tilt cards
-(function tiltCards(){
-  const cards = document.querySelectorAll('.tilt');
-  cards.forEach(card=>{
-    card.addEventListener('pointermove', (ev)=>{
-      const r = card.getBoundingClientRect();
-      const px = (ev.clientX - r.left) / r.width;
-      const py = (ev.clientY - r.top) / r.height;
-      const rotY = (px - 0.5) * 16; const rotX = (0.5 - py) * 10;
-      const scale = 1.03;
-      card.style.transform = `perspective(900px) rotateX(${rotX}deg) rotateY(${rotY}deg) scale(${scale})`;
-      card.style.transition = 'transform 120ms linear';
-    });
-    card.addEventListener('pointerleave', ()=> { card.style.transform = ''; card.style.transition = 'transform .6s cubic-bezier(.2,.9,.2,1)'; });
+function shootingStar(){
+  const sx = Math.random()*w*0.7 + w*0.1;
+  const sy = Math.random()*h*0.6 + h*0.05;
+  const len = 200 + Math.random()*300;
+  const angle = -Math.PI/4 + (Math.random()-0.5)*0.3;
+  let t=0;
+  function anim(){
+    t+=20;
+    ctx.beginPath();
+    const x = sx + Math.cos(angle)*(t);
+    const y = sy + Math.sin(angle)*(t);
+    const grad = ctx.createLinearGradient(x,y,x+len,y+len);
+    grad.addColorStop(0,'rgba(255,255,255,0.8)');
+    grad.addColorStop(1,'rgba(255,255,255,0)');
+    ctx.strokeStyle = grad;
+    ctx.lineWidth = 2;
+    ctx.moveTo(x,y);
+    ctx.lineTo(x+Math.cos(angle)*len, y+Math.sin(angle)*len);
+    ctx.stroke();
+    if(t < len) requestAnimationFrame(anim);
+  }
+  anim();
+}
+
+/* --------------------------
+   Counters
+   --------------------------*/
+const counters = document.querySelectorAll('.count');
+counters.forEach(el => {
+  const target = +el.dataset.target;
+  let current = 0;
+  const step = Math.max(1, Math.floor(target / 140));
+  function uptick(){
+    current += step;
+    if(current >= target) {
+      el.textContent = target;
+    } else {
+      el.textContent = current;
+      requestAnimationFrame(uptick);
+    }
+  }
+  // Delay start until visible
+  const obs = new IntersectionObserver(entries=>{
+    if(entries[0].isIntersecting){ uptick(); obs.disconnect();}
+  }, {threshold:0.3});
+  obs.observe(el);
+});
+
+/* --------------------------
+   Rocket animation
+   --------------------------*/
+const ship = document.getElementById('ship');
+const flame = document.getElementById('flame');
+
+let seed = 0;
+function rocketLoop(){
+  seed += 0.02;
+  const bob = Math.sin(seed)*6;
+  ship.setAttribute('transform', `translate(100,${100 + bob}) rotate(${Math.sin(seed)*3})`);
+  const fScale = 1 + Math.abs(Math.sin(seed*4))*0.6;
+  flame.setAttribute('transform', `scale(1,${fScale}) translate(0, ${-6})`);
+  requestAnimationFrame(rocketLoop);
+}
+rocketLoop();
+
+/* --------------------------
+   Interactive Diagram (SVG nodes)
+   --------------------------*/
+const diagramRoot = document.getElementById('diagram');
+
+const nodes = [
+  { id:'CS', label:'Computer Science', x: 280, y: 60, r:36, color:'#7f5af0' },
+  { id:'QC', label:'Quantum Computing', x: 80, y: 180, r:28, color:'#8be9fd' },
+  { id:'AI', label:'AI & ML', x: 420, y: 220, r:30, color:'#ffb86b' },
+  { id:'NOIVA', label:'Noiva Project', x: 280, y: 320, r:34, color:'#ff7a18' },
+  { id:'MFC', label:'Microbial Fuel Cell', x: 80, y: 340, r:30, color:'#9be7a5' },
+  { id:'CODE', label:'CodeUnity', x: 520, y: 90, r:26, color:'#c8b7ff' },
+  { id:'MIT', label:'MIT BWSI', x: 520, y: 320, r:26, color:'#b0e0ff' }
+];
+
+const links = [
+  ['CS','QC'], ['CS','AI'], ['CS','CODE'], ['AI','NOIVA'], ['QC','MIT'], ['NOIVA','MFC'], ['CODE','MFC'], ['MIT','NOIVA']
+];
+
+function createDiagram(){
+  const NS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(NS,'svg');
+  svg.setAttribute('viewBox','0 0 600 420');
+  svg.setAttribute('width','100%');
+  svg.setAttribute('height','100%');
+  svg.setAttribute('preserveAspectRatio','xMidYMid meet');
+  svg.style.maxWidth = '100%';
+
+  // defs for glow
+  const defs = document.createElementNS(NS,'defs');
+  const filter = document.createElementNS(NS,'filter');
+  filter.setAttribute('id','glow');
+  filter.innerHTML = `<feGaussianBlur stdDeviation="6" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>`;
+  defs.appendChild(filter);
+  svg.appendChild(defs);
+
+  // links
+  links.forEach(([a,b])=>{
+    const na = nodes.find(n=>n.id===a);
+    const nb = nodes.find(n=>n.id===b);
+    const line = document.createElementNS(NS,'line');
+    line.setAttribute('x1',na.x);
+    line.setAttribute('y1',na.y);
+    line.setAttribute('x2',nb.x);
+    line.setAttribute('y2',nb.y);
+    line.setAttribute('stroke','rgba(255,255,255,0.06)');
+    line.setAttribute('stroke-width','2');
+    svg.appendChild(line);
   });
-})();
 
-// project modal
-(function projectModal(){
-  const modal = document.getElementById('projectModal');
-  const content = document.getElementById('modalContent');
-  const close = document.getElementById('modalClose');
-  document.querySelectorAll('.project .view').forEach(btn => {
-    btn.addEventListener('click', (e)=>{
-      const card = e.target.closest('.project');
-      const info = JSON.parse(card.getAttribute('data-project'));
-      content.innerHTML = `
-        <div style="display:grid;grid-template-columns:1fr 320px;gap:1rem;">
-          <div>
-            <h2>${escapeHtml(info.title)}</h2>
-            <p style="color:var(--muted)">${escapeHtml(info.desc)}</p>
-            <p><strong>Tags:</strong> ${info.tags.map(t=>`<span style="margin-right:.5rem;background:rgba(255,255,255,0.02);padding:.3rem .5rem;border-radius:8px;">${escapeHtml(t)}</span>`).join('')}</p>
-            <h4>Notes</h4><p style="color:var(--muted)">Add experiment details, dataset links, or code snippets here. Replace placeholders with your repo links or lab notes.</p>
-          </div>
-          <div style="border-radius:10px;overflow:hidden">
-            <img src="${info.img}" style="width:100%;height:100%;object-fit:cover" alt="${escapeHtml(info.title)}">
-          </div>
-        </div>
-      `;
-      modal.classList.add('show'); modal.setAttribute('aria-hidden','false');
+  // nodes
+  nodes.forEach(n=>{
+    const g = document.createElementNS(NS,'g');
+    g.setAttribute('class','node');
+    g.setAttribute('transform',`translate(${n.x},${n.y})`);
+    g.style.cursor='pointer';
+
+    const circle = document.createElementNS(NS,'circle');
+    circle.setAttribute('r',n.r);
+    circle.setAttribute('fill',n.color);
+    circle.setAttribute('opacity','0.14');
+    circle.setAttribute('stroke',n.color);
+    circle.setAttribute('stroke-width','1.2');
+
+    const label = document.createElementNS(NS,'text');
+    label.setAttribute('y', n.r + 18);
+    label.setAttribute('text-anchor','middle');
+    label.setAttribute('font-size','12');
+    label.setAttribute('fill','#dff4ff');
+    label.textContent = n.label;
+
+    g.appendChild(circle);
+    g.appendChild(label);
+
+    // hover behavior
+    g.addEventListener('mouseenter', () => {
+      circle.setAttribute('opacity','0.32');
+      circle.setAttribute('filter','url(#glow)');
+      label.setAttribute('fill','#ffffff');
+      showTooltip(n);
     });
-  });
-  close.addEventListener('click', ()=>{ modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); });
-  modal.addEventListener('click', (e)=>{ if(e.target === modal) { modal.classList.remove('show'); modal.setAttribute('aria-hidden','true'); } });
-  function escapeHtml(s){ return (s+'').replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
-})();
+    g.addEventListener('mouseleave', () => {
+      circle.setAttribute('opacity','0.14');
+      circle.removeAttribute('filter');
+      label.setAttribute('fill','#dff4ff');
+      hideTooltip();
+    });
 
-// smooth scroll
-document.querySelectorAll('a[href^="#"]').forEach(a=>{
-  a.addEventListener('click', e=>{
-    const href = a.getAttribute('href');
-    if(href.length > 1){
-      e.preventDefault();
-      const el = document.querySelector(href);
-      if(el) el.scrollIntoView({behavior:'smooth', block:'start'});
+    // click to show details
+    g.addEventListener('click', () => {
+      alert(`${n.label}\n\nClicking nodes shows quick details — this diagram connects skills to projects. (This alert is a placeholder interactive action.)`);
+    });
+
+    svg.appendChild(g);
+  });
+
+  diagramRoot.appendChild(svg);
+
+  // tooltip
+  const tip = document.createElement('div');
+  tip.id='diagram-tip';
+  tip.style.position='absolute';
+  tip.style.padding='10px 12px';
+  tip.style.borderRadius='8px';
+  tip.style.background='rgba(0,0,0,0.6)';
+  tip.style.color='#e8f8ff';
+  tip.style.pointerEvents='none';
+  tip.style.fontSize='13px';
+  tip.style.display='none';
+  diagramRoot.appendChild(tip);
+
+  function showTooltip(n){
+    tip.style.display='block';
+    tip.textContent = tooltipText(n.id);
+  }
+  function hideTooltip(){ tip.style.display='none' }
+
+  function tooltipText(id){
+    switch(id){
+      case 'CS': return 'Core programming, algorithms, and competitive programming (USACO, ACSL).';
+      case 'QC': return 'Quantum computing coursework and exploration — goal: minor at Stanford.';
+      case 'AI': return 'AI/ML skills used in projects like Noiva and inventory prediction.';
+      case 'NOIVA': return 'Noiva — white cane improvement: GPS + vibration patterns + AI object detection (current focus: object detection).';
+      case 'MFC': return 'Microbial Fuel Cell: sustainable energy from wastewater residue; web dashboard & AI predictions planned.';
+      case 'CODE': return 'CodeUnity — nonprofit to close the gender gap in CS with workshops and mentorship.';
+      case 'MIT': return 'BWSI group leader — inventory algorithm for nonprofits; taught ML best practices.';
+      default: return '';
+    }
+  }
+
+  // mouse move to position tooltip
+  diagramRoot.addEventListener('mousemove', (ev)=>{
+    const rect = diagramRoot.getBoundingClientRect();
+    const tipEl = document.getElementById('diagram-tip');
+    if(tipEl && tipEl.style.display !== 'none'){
+      tipEl.style.left = (ev.clientX - rect.left + 14) + 'px';
+      tipEl.style.top = (ev.clientY - rect.top + 10) + 'px';
     }
   });
+}
+
+createDiagram();
+
+/* --------------------------
+   Small UI interactions
+   --------------------------*/
+document.getElementById('view-activities').addEventListener('click', ()=>{
+  document.getElementById('activities').scrollIntoView({behavior:'smooth'});
 });
 
-// keyboard theme shortcut
-window.addEventListener('keydown', (e)=>{
-  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'd'){
-    e.preventDefault(); toggleDarkMode();
-  }
-});
+/* --------------------------
+   Accessibility: reduce motion if requested
+   --------------------------*/
+const media = window.matchMedia('(prefers-reduced-motion: reduce)');
+if(media.matches){
+  // stop animations that rely on heavy motion
+  cancelAnimationFrame(draw);
+  // remove subtle transforms
+  document.querySelectorAll('.activity, .project').forEach(el => el.style.transition = 'none');
+}
